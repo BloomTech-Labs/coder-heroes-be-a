@@ -2,7 +2,10 @@ package com.bloomtechlabs.coderheroesbea.controllers;
 
 import com.bloomtechlabs.coderheroesbea.entities.Profiles;
 import com.bloomtechlabs.coderheroesbea.services.ProfilesService;
+import net.bytebuddy.implementation.bytecode.Throw;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -13,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/profile/")
+@RequestMapping("/profile")
 public class ProfilesController {
 
     private ProfilesService service;
@@ -22,8 +25,6 @@ public class ProfilesController {
         this.service = service;
     }
 
-
-
     @GetMapping
     public ResponseEntity<List<Profiles>> getAllProfiles() {
         List<Profiles> profiles = service.findAll();
@@ -31,9 +32,10 @@ public class ProfilesController {
     }
 
     @GetMapping(value = "/{profiles_id}")
-    public ResponseEntity<Profiles> getProfileByID(@PathVariable("profiles_id") Long profile_id) {
+    public ResponseEntity<Object> getProfileByID(@PathVariable("profiles_id") Long profile_id) {
         Optional<Profiles> profile = service.find(profile_id);
-        return ResponseEntity.of(profile);
+        return ResponseEntity.of(Optional.ofNullable(profile));
+
     }
 
     @GetMapping(value = "/role/{role_id}")

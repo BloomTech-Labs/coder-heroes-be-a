@@ -2,6 +2,9 @@ package com.bloomtechlabs.coderheroesbea.services;
 
 import com.bloomtechlabs.coderheroesbea.entities.Profiles;
 import com.bloomtechlabs.coderheroesbea.repositories.ProfilesRepository;
+import net.bytebuddy.implementation.bytecode.Throw;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,11 +27,17 @@ public class ProfilesService {
         return repository.findAll();
     }
 
-    public Optional<Profiles> find(Long profileId) {
+    public Optional<Profiles> find(Long profileId)  {
+        if (profileId == null) {
+          throw new RuntimeException(" Invalid Profile Id Cannot Be Null ");
+        }
         return repository.findById(profileId);
     }
 
     public List<Profiles> findProfilesByRoleId(Long roleID) {
+        if (roleID == null) {
+            throw new RuntimeException(" Invalid Role Id Cannot Be Null ");
+        }
         return repository.findProfilesByRoleId(roleID);
     }
 
